@@ -7,7 +7,7 @@ import time
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 
-#Configuracion del Relé (LED)
+#Configuracion del rele (LED)
 LED=18
 GPIO.setup(LED,GPIO.OUT)
 GPIO.output(LED,0)
