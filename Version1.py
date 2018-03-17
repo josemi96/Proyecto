@@ -8,7 +8,7 @@ GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 
 #Configuracion del rele (LED)
-LED=18
+LED=12
 GPIO.setup(LED,GPIO.OUT)
 GPIO.output(LED,0)
 
@@ -38,46 +38,49 @@ def rc_time (pin_light):
     GPIO.setup(pin_light, GPIO.OUT)
     GPIO.output(pin_light, GPIO.LOW)
     time.sleep(0.1)
-
     #Change the pin back to input
     GPIO.setup(pin_light, GPIO.IN)
-
     #Count until the pin goes high
     while (GPIO.input(pin_light) == GPIO.LOW):
         count += 1
-
     return count
 
 #Comienzo del programa:
 #Catch when script is interrupted, cleanup correctly
 try:
-    config_bluetooth()
+    server_socket=bluetooth.BluetoothSocket(bluetooth.RFCOMM) #Creamos el socket bluetooth
+    server_socket.bind(("",bluetooth.PORT_ANY))
+    server_socket.listen(1)
+    client_socket,address=server_socket.accept()
+    print "Accepted connection from:" , address
+ 
     # Main loop
     while True:
         data = client_socket.recv(1024)
-        print ("Received: " , data)
+        print "Received: " , data
 
-        if (data == "Activar_Rele"):
-         print ("Comando: Activar_Rele")
-         GPIO.output(LED,1)
+        if (data == "A"):
+          print "Comando: Activar_Rele"
+          GPIO.output(LED,1)
 
-        if (data =="Desactivar_Rele"):
-         print ("Comando: Desactivar_Rele")
-         GPIO.output(LED,0)
+        if (data =="D"):
+          print "Comando: Desactivar_Rele"
+          GPIO.output(LED,0)
 
-        if (data =="Leer_Luz"):
-         print ("Comando: Leer_Luz")
-         measure = rc_time(pin_light)
-         print measure
+        if (data =="L"):
+          print "Comando: Leer_Luz"
+          measure = rc_time(pin_light)
+          print measure
 
-        if (data =="Leer_Temp"):
-         print ("Comando: Leer_Temp")
-         temp = get_temp_sens()
-         print temp
+        if (data =="T"):
+          print "Comando: Leer_Temp"
+          temp = get_temp_sens()
+          client_socket.send("%10.3f" % temp)
+          print temp
 
-        if(data=="Cerrar_Programa"):
-         print ("Comando: Cerrar_Programa")
-         break
+        if(data=="C"):
+          print "Comando: Cerrar_Programa"
+          break
 
 
     # End Main loop
