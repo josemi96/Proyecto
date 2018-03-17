@@ -58,26 +58,26 @@ try:
         print ("Received: " , data)
 
         if (data == "Activar_Rele"):
-        print ("Comando: Activar_Rele")
-        GPIO.output(LED,1)
+         print ("Comando: Activar_Rele")
+         GPIO.output(LED,1)
 
         if (data =="Desactivar_Rele"):
-        print ("Comando: Desactivar_Rele")
-        GPIO.output(LED,0)
+         print ("Comando: Desactivar_Rele")
+         GPIO.output(LED,0)
 
         if (data =="Leer_Luz"):
-        print ("Comando: Leer_Luz")
-        measure = rc_time(pin_light)
-        print measure
+         print ("Comando: Leer_Luz")
+         measure = rc_time(pin_light)
+         print measure
 
         if (data =="Leer_Temp"):
-        print ("Comando: Leer_Temp")
-        temp = get_temp_sens()
-        print temp
+         print ("Comando: Leer_Temp")
+         temp = get_temp_sens()
+         print temp
 
         if(data=="Cerrar_Programa"):
-        print ("Comando: Cerrar_Programa")
-        break
+         print ("Comando: Cerrar_Programa")
+         break
 
 
     # End Main loop
