@@ -39,6 +39,10 @@ def rc_time (pin_light):
         count += 1
     return count
 
+#Configuracion por defecto del modo Automatico:
+temperatura = 25
+luz=50 #En tanto %
+
 #Comienzo del programa:
 #Catch when script is interrupted, cleanup correctly
 try:
@@ -53,32 +57,44 @@ try:
         data = client_socket.recv(1024)
         print "Received: " , data
 
-        if (data == "A"):
+        if (data == "Activar_Rele"):
           print "Comando: Activar_Rele"
           GPIO.output(LED,1)
 
-        if (data =="D"):
+        if (data =="Desactivar_Rele"):
           print "Comando: Desactivar_Rele"
           GPIO.output(LED,0)
 
-        if (data =="L"):
+        if (data =="Leer_Luz"):
           print "Comando: Leer_Luz"
           measure = rc_time(pin_light)
           print measure
 
-        if (data =="T"):
+        if (data =="Leer_Temp"):
           print "Comando: Leer_Temp"
           temp = get_temp_sens()
           client_socket.send("%10.3f" % temp)
           print temp
 
-        if(data=="C"):
-          print "Comando: Cerrar_Programa"
-          break
+        
+        if(data=="Config_Auto"):
+          print "Comando: Config_Auto"
+          data = client_socket.recv(1024)
+          luz=data
+          data = client_socket.recv(1024)
+          temperatura=data         
 
         if(data=="Automatizacion"):
-          p = subprocess.Popen(["python","prueba.py"])
+          print "Comando: Automatizacion"
+          p = subprocess.Popen(["python","Automatizacion.py",luz,temperatura])
+     
+        if(data=="No_Automatizacion"):
+          print "Comando: No_Automatizacion"
+          p.terminate()
 
+        if(data=="Cerrar_Programa"):
+          print "Comando: Cerrar_Programa"
+          break
 
     # End Main loop
 except KeyboardInterrupt:
@@ -88,3 +104,5 @@ finally:
     GPIO.cleanup()
     client_socket.close()
     server_socket.close()
+
+#Fin del Programa
