@@ -40,8 +40,8 @@ def rc_time (pin_light):
     return count
 
 #Configuracion por defecto del modo Automatico:
-temperatura = 25
-luz=50 #En tanto %
+temperatura ="24"
+luz="50" #En tanto %
 
 #Comienzo del programa:
 #Catch when script is interrupted, cleanup correctly
@@ -81,16 +81,20 @@ try:
           print "Comando: Config_Auto"
           data = client_socket.recv(1024)
           luz=data
+          print "luz",luz
           data = client_socket.recv(1024)
-          temperatura=data         
+          temperatura=data
+          print "temperatura",temperatura         
 
         if(data=="Automatizacion"):
           print "Comando: Automatizacion"
           p = subprocess.Popen(["python","Automatizacion.py",luz,temperatura])
+          #write estado conectado
      
         if(data=="No_Automatizacion"):
           print "Comando: No_Automatizacion"
           p.terminate()
+          #write estado desconectado
 
         if(data=="Cerrar_Programa"):
           print "Comando: Cerrar_Programa"

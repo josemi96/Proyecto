@@ -24,7 +24,7 @@ def rc_time (pin_to_circuit):
     while (GPIO.input(pin_to_circuit) == GPIO.LOW):
         count += 1
 
-    return count
+    return count/750
 
 #Catch when script is interrupted, cleanup correctly
 try:

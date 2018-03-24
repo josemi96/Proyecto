@@ -1,10 +1,13 @@
-#Automatización
+#Automatizacion
 
 import sys
 import RPi.GPIO as GPIO
 import time
 GPIO.setmode(GPIO.BOARD)
+GPIO.setup(12,GPIO.OUT)
+GPIO.setwarnings(False)
 
+#Lectura de la temperatura
 def get_temp_sens():
         tfile = open("/sys/bus/w1/devices/28-0516a180cfff/w1_slave")
         text = tfile.read()
@@ -25,24 +28,23 @@ def rc_time (pin_to_circuit):
     time.sleep(0.1)
     #Change the pin back to input
     GPIO.setup(pin_to_circuit, GPIO.IN)
-
     #Count until the pin goes high
     while (GPIO.input(pin_to_circuit) == GPIO.LOW):
         count += 1
-    return count/750
+    return count/500
 
 #Catch when script is interrupted, cleanup correctly
 try:
-    luz= sys.argv[1]
-    temperatura= sys.argv[2]
+    luz= float(sys.argv[1])
+    temperatura= float (sys.argv[2])
     # Main loop
     while True:
         time.sleep(1)
         measure = rc_time(pin_to_circuit)
-        print measure
+        #print measure
         temp = get_temp_sens()
-        print temp
-        if ((measure<luz) or (temp>temperatura)) :
+        #print temp
+        if ((measure>luz) or (temp>temperatura)) :
              GPIO.output(12,True)
         else:
              GPIO.output(12,False)
