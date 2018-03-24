@@ -4,6 +4,7 @@
 import bluetooth
 import RPi.GPIO as GPIO
 import time
+import shlex, subprocess
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 
@@ -11,12 +12,6 @@ GPIO.setwarnings(False)
 LED=12
 GPIO.setup(LED,GPIO.OUT)
 GPIO.output(LED,0)
-
-def config_bluetooth():
-    server_socket=bluetooth.BluetoothSocket(bluetooth.RFCOMM) #Creamos el socket bluetooth
-    server_socket.bind(("",bluetooth.PORT_ANY))
-    server_socket.listen(1)
-    client_socket,address=server_socket.accept()
 
 #Funcion leer Temperatura:
 def get_temp_sens():
@@ -31,7 +26,6 @@ def get_temp_sens():
 
 #Funcion leer sensor de Luz
 pin_light = 7
-GPIO.setup(12,GPIO.OUT)
 def rc_time (pin_light):
     count = 0
     #Output on the pin for
@@ -81,6 +75,9 @@ try:
         if(data=="C"):
           print "Comando: Cerrar_Programa"
           break
+
+        if(data=="Automatizacion"):
+          p = subprocess.Popen(["python","prueba.py"])
 
 
     # End Main loop
