@@ -101,9 +101,8 @@ temperatura ="24"
 luz="50" #En tanto %
 
 #Comienzo del programa:
-def main():
 #Catch when script is interrupted, cleanup correctly
- try:
+try:
     lcd_init()
     lcd_string(">Sin Conexion   ",LCD_LINE_1)
     server_socket=bluetooth.BluetoothSocket(bluetooth.RFCOMM) #Creamos el socket bluetooth
@@ -164,10 +163,10 @@ def main():
           break
 
     # End Main loop
- except KeyboardInterrupt:
+except KeyboardInterrupt:
     pass
 
- finally:
+finally:
     GPIO.cleanup()
     lcd_byte(0x01, LCD_CMD)
     client_socket.close()
