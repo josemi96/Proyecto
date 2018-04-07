@@ -1,6 +1,7 @@
 #Version 1.1
 
 #SETUP
+from struct import unpack
 import bluetooth
 import RPi.GPIO as GPIO
 import time
@@ -65,10 +66,13 @@ def lcd_string(message,line):
   for i in range(LCD_WIDTH):
     lcd_byte(ord(message[i]),LCD_CHR)
 
-#Configuracion del rele (LED)
-LED=12
-GPIO.setup(LED,GPIO.OUT)
-GPIO.output(LED,0)
+#Configuracion de los reles: 
+R1=12
+R2=16
+GPIO.setup(R1,GPIO.OUT)
+GPIO.setup(R2,GPIO.OUT)
+GPIO.output(R1,0)
+GPIO.output(R2,0)
 
 #Funcion leer Temperatura:
 def get_temp_sens():
@@ -97,8 +101,8 @@ def rc_time (pin_light):
     return count
 
 #Configuracion por defecto del modo Automatico:
-temperatura ="24"
-luz="50" #En tanto %
+Temperatura ="24"
+Luz="50" #En tanto %
 
 #Comienzo del programa:
 #Catch when script is interrupted, cleanup correctly
@@ -112,18 +116,27 @@ try:
     print "Accepted connection from:" , address
     lcd_string(">Conexion: ok   ",LCD_LINE_1)
     lcd_string(">Modo Auto: off ",LCD_LINE_2)
-    # Main loop
+    # Bucle Principal
     while True:
         data = client_socket.recv(1024)
-        print "Received: " , data
+        Comando =data[0:10]       
+        print "Recibido: " , Comando
 
-        if (data == "Activar_Rele"):
-          print "Comando: Activar_Rele"
-          GPIO.output(LED,1)
+        if (Comando == "Comando_R1"):
+          Comando,Modo = unpack('@10si',data)
+          GPIO.output(R1,Modo)
+          if(Modo==1):
+           print "Activo Rele 1"
+          else:
+           print "Desactivo Rele 1"
 
-        if (data =="Desactivar_Rele"):
-          print "Comando: Desactivar_Rele"
-          GPIO.output(LED,0)
+        if (Comando == "Comando_R2"):
+          Comando,Modo = unpack('@10si',data)
+          GPIO.output(R2,Modo)
+          if(Modo==1):
+           print "Activo Rele 2"
+          else:
+           print "Desactivo Rele 2"
 
         if (data =="Leer_Luz"):
           print "Comando: Leer_Luz"
@@ -137,32 +150,30 @@ try:
           print temp
 
         
-        if(data=="Config_Auto"):
+        if(Comando=="Comando_CA"):
           print "Comando: Config_Auto"
-          data = client_socket.recv(1024)
-          luz=data
-          print "luz",luz
-          data = client_socket.recv(1024)
-          temperatura=data
-          print "temperatura",temperatura         
+          Comando,Luz,Temperatura = unpack('@10sii',data)
+          print "Luz: ",Luz
+          print "temperatura: ",Temperatura         
 
-        if(data=="Automatizacion"):
-          print "Comando: Automatizacion"
-          p = subprocess.Popen(["python","Automatizacion.py",luz,temperatura])
+        if(Comando=="Comando_AA"):
+          print "Activando Modo Automatico"
+          p = subprocess.Popen(["python","Automatizacion.py",str(Luz),str(Temperatura)])
           lcd_string(">Modo Auto: on ",LCD_LINE_2)
           #write estado conectado
      
-        if(data=="No_Automatizacion"):
-          print "Comando: No_Automatizacion"
+        if(Comando=="Comando_NA"):
+          print "Desactivando Modo Automatico"
           p.terminate()
+          GPIO.cleanup()
           lcd_string(">Modo Auto: off ",LCD_LINE_2)
           #write estado desconectado
 
-        if(data=="Cerrar_Programa"):
-          print "Comando: Cerrar_Programa"
+        if(Comando=="Comando_CP"):
+          print "Cerrando el Programa.."
           break
 
-    # End Main loop
+    # Fin del bucle principal
 except KeyboardInterrupt:
     pass
 
