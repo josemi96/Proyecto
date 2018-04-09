@@ -1,7 +1,7 @@
 #Version 1.1
 
 #SETUP
-from struct import unpack
+from struct import pack, unpack
 import bluetooth
 import RPi.GPIO as GPIO
 import time
@@ -138,17 +138,19 @@ try:
           else:
            print "Desactivo Rele 2"
 
-        if (data =="Leer_Luz"):
-          print "Comando: Leer_Luz"
+        if (Comando == "Comando_LL"):
+          print "Realizando lectura de luminosidad.."
           measure = rc_time(pin_light)
+          packet = pack('10sf',Comando,measure)
+          client_socket.send(packet)
           print measure
 
-        if (data =="Leer_Temp"):
-          print "Comando: Leer_Temp"
+        if (Comando =="Comando_LT"):
+          print "Realizando lectura de temperatura.."
           temp = get_temp_sens()
-          client_socket.send("%10.3f" % temp)
+          packet = pack('10sf',Comando,temp)
+          client_socket.send(packet)
           print temp
-
         
         if(Comando=="Comando_CA"):
           print "Comando: Config_Auto"
