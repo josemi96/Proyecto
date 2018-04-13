@@ -100,9 +100,14 @@ def rc_time (pin_light):
         count += 1
     return count
 
+#Configuracion del modo Programado:
+Config_CP = False
+pid_p=0
+
 #Configuracion por defecto del modo Automatico:
 Temperatura ="24"
 Luz="50" #En tanto %
+pid_a=0
 
 #Comienzo del programa:
 #Catch when script is interrupted, cleanup correctly
@@ -152,26 +157,46 @@ try:
           client_socket.send(packet)
           print temp
         
+        if(Comando=="Comando_CP"):
+          print "Configurando modo Programado"
+          Comando,Modo1,Hora1,Minuto1,Modo2,Hora2,Minuto2 = unpack('@10s6i',data)
+          print "R1, ",Modo1," a las ",Hora1,":",Minuto1,"."
+          print "R2, ",Modo2," a las ",Hora2,":",Minuto2,"."
+          Config_CP = True
+
+        if(Comando=="Comando_AP"):
+           if (Config_CP):
+              print "Activando Modo Programado"
+              pid_p =subprocess.Popen(["python","Programacion.py",str(Modo1),str(Hora1),str(Minuto1),str(Modo2),str(Hora2),str(Minuto2)])
+              lcd_string(">Modo Prog: on ",LCD_LINE_2)
+           else:
+              client_socket.send(Comando)          
+
+        if(Comando=="Comando_NP"):
+          print "Desactivando Modo Programado"
+          pid_p.terminate()
+          lcd_string(">Modo Prog: off ",LCD_LINE_2)          
+
         if(Comando=="Comando_CA"):
-          print "Comando: Config_Auto"
+          print "Configurando modo Automatico"
           Comando,Luz,Temperatura = unpack('@10sii',data)
           print "Luz: ",Luz
           print "temperatura: ",Temperatura         
 
         if(Comando=="Comando_AA"):
           print "Activando Modo Automatico"
-          p = subprocess.Popen(["python","Automatizacion.py",str(Luz),str(Temperatura)])
+          pid_a = subprocess.Popen(["python","Automatizacion.py",str(Luz),str(Temperatura)])
           lcd_string(">Modo Auto: on ",LCD_LINE_2)
           #write estado conectado
      
         if(Comando=="Comando_NA"):
           print "Desactivando Modo Automatico"
-          p.terminate()
+          pid_a.terminate()
           GPIO.cleanup()
           lcd_string(">Modo Auto: off ",LCD_LINE_2)
           #write estado desconectado
 
-        if(Comando=="Comando_CP"):
+        if(Comando=="Comando_CG"):
           print "Cerrando el Programa.."
           break
 
@@ -180,6 +205,10 @@ except KeyboardInterrupt:
     pass
 
 finally:
+    if (pid_a!=0):
+      pid_a.terminate()
+    if (pid_p!=0):
+      pid_p.terminate()
     GPIO.cleanup()
     lcd_byte(0x01, LCD_CMD)
     client_socket.close()
