@@ -105,8 +105,11 @@ Config_CP = False
 pid_p=0
 
 #Configuracion por defecto del modo Automatico:
+Config_CA = False
 Temperatura ="24"
 Luz="50" #En tanto %
+L1=0
+L2=100000
 pid_a=0
 
 #Comienzo del programa:
@@ -157,6 +160,21 @@ try:
           client_socket.send(packet)
           print temp
         
+        if(Comando=="Comando_L1"):
+          print "Ajustando luz minima.."
+          L1 = rc_time(pin_light)
+          packet = pack('10sf',Comando,L1)
+          client_socket.send(packet)
+          print L1
+
+        if(Comando=="Comando_L2"):
+          print "Ajustando luz maxima.."
+          L2 = rc_time(pin_light)
+          packet = pack('10sf',Comando,L2)
+          client_socket.send(packet)
+          print L2
+
+
         if(Comando=="Comando_CP"):
           print "Configurando modo Programado"
           Comando,Modo1,Hora1,Minuto1,Modo2,Hora2,Minuto2 = unpack('@10s6i',data)
@@ -182,20 +200,22 @@ try:
           Comando,Luz,Temperatura = unpack('@10sii',data)
           print "Luz: ",Luz
           print "temperatura: ",Temperatura         
+          Config_CA = True
 
         if(Comando=="Comando_AA"):
-          print "Activando Modo Automatico"
-          pid_a = subprocess.Popen(["python","Automatizacion.py",str(Luz),str(Temperatura)])
-          lcd_string(">Modo Auto: on ",LCD_LINE_2)
-          #write estado conectado
+          if(Config_CA):
+             print "Activando Modo Automatico"
+             pid_a = subprocess.Popen(["python","Automatizacion.py",str(Luz),str(Temperatura),str(L1),str(L2)])
+             lcd_string(">Modo Auto: on ",LCD_LINE_2)
+          else:
+             client_socket.send(Comando)
      
         if(Comando=="Comando_NA"):
           print "Desactivando Modo Automatico"
           pid_a.terminate()
           GPIO.cleanup()
           lcd_string(">Modo Auto: off ",LCD_LINE_2)
-          #write estado desconectado
-
+         
         if(Comando=="Comando_CG"):
           print "Cerrando el Programa.."
           break
