@@ -14,3 +14,4 @@ while ok:
   prev_input = input
   #Pequena pausa
   time.sleep(0.05)
+exit(0)

@@ -115,6 +115,7 @@ pid_a=0
 #Comienzo del programa:
 #Catch when script is interrupted, cleanup correctly
 try:
+    lcd_byte(0x01, LCD_CMD) #por si no cerro bien la ultima vez
     lcd_init()
     lcd_string(">Sin Conexion   ",LCD_LINE_1)
     server_socket=bluetooth.BluetoothSocket(bluetooth.RFCOMM) #Creamos el socket bluetooth
