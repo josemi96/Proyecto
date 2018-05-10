@@ -2,14 +2,6 @@
 #-- Jose Miguel Hidalgo Rondon -----------------
 #-----------------------------------------------
 #SETUP
-from struct import pack, unpack
-import bluetooth
-import RPi.GPIO as GPIO
-import time
-import shlex, subprocess
-import smbus
-GPIO.setmode(GPIO.BOARD)
-GPIO.setwarnings(False)
 from setup import *
 #Comienzo del programa:
 #Catch when script is interrupted, cleanup correctly

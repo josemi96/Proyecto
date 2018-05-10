@@ -1,5 +1,12 @@
 #INICIO DE SETUP
-
+from struct import pack, unpack
+import bluetooth
+import RPi.GPIO as GPIO
+import time
+import shlex, subprocess
+import smbus
+GPIO.setmode(GPIO.BOARD)
+GPIO.setwarnings(False)
 #Configuracion del LCD(16x02) I2C
 # Define some device parameters
 I2C_ADDR  = 0x27 # I2C device address
