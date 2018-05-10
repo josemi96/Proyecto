@@ -1,4 +1,6 @@
 #INICIO DE SETUP
+
+#Declaracion de librerias:
 from struct import pack, unpack
 import bluetooth
 import RPi.GPIO as GPIO
