@@ -6,6 +6,7 @@ import bluetooth
 import RPi.GPIO as GPIO
 import time
 import shlex, subprocess
+import sys
 import smbus
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
