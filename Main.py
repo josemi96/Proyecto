@@ -77,7 +77,7 @@ try:
         if(Comando=="Comando_AP"):
            if (Config_CP):
               print "Activando Modo Programado"
-              pid_p =subprocess.Popen(["python","Programacion.py",str(Modo1),str(Hora1),str(Minuto1),str(Modo2),str(Hora2),str(Minuto2)])
+              pid_p =subprocess.Popen(["python","/home/pi/Proyecto/Programacion.py",str(Modo1),str(Hora1),str(Minuto1),str(Modo2),str(Hora2),str(Minuto2)])
               lcd_string(">Modo Prog: on ",LCD_LINE_2)
            else:
               client_socket.send(Comando)          
@@ -97,7 +97,7 @@ try:
         if(Comando=="Comando_AA"):
           if(Config_CA):
              print "Activando Modo Automatico"
-             pid_a = subprocess.Popen(["python","Automatizacion.py",str(Luz),str(Temperatura),str(L1),str(L2)])
+             pid_a = subprocess.Popen(["python","/home/pi/Proyecto/Automatizacion.py",str(Luz),str(Temperatura),str(L1),str(L2)])
              lcd_string(">Modo Auto: on ",LCD_LINE_2)
           else:
              client_socket.send(Comando)

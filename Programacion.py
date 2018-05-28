@@ -11,8 +11,7 @@ R1=16
 R2=12
 GPIO.setup(R1,GPIO.OUT)
 GPIO.setup(R2,GPIO.OUT)
-GPIO.output(R1,0)
-GPIO.output(R2,0)
+
 
 #Catch when script is interrupted, cleanup correctly
 try:
