@@ -9,7 +9,7 @@ Encendido=False
 while True:
   input = GPIO.input(13)
   if ((not prev_input) and input):
-     p = subprocess.Popen(["python","/home/pi/Proyecto/Main.py"])
+     p = subprocess.Popen(["python","/home/pi/Proyecto/VersionFinal.py"])
      Encendido = True
   prev_input = input
   #Pequena pausa
