@@ -1,7 +1,7 @@
 #-----------------------------------------------
 #-- Jose Miguel Hidalgo Rondon -----------------
 #-----------------------------------------------
-#SETUP
+#SETYP
 from setup import *
 #Comienzo del programa:
 #Catch when script is interrupted, cleanup correctly
