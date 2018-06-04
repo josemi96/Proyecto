@@ -3,6 +3,8 @@
 #-----------------------------------------------
 #Comienzo del programa:
 #Catch when script is interrupted, cleanup correctly
+import bluetooth
+
 try:
     server_socket=bluetooth.BluetoothSocket(bluetooth.RFCOMM) #Creamos el socket bluetooth
     server_socket.bind(("",bluetooth.PORT_ANY))
