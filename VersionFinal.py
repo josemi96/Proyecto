@@ -217,7 +217,7 @@ try:
         if(Comando=="Comando_AA"):
           if(Config_CA):
              print "Activando Modo Automatico"
-             pid_a = subprocess.Popen(["python","/home/pi/Proyecto/Automatizacion.py",str(calc_luz(Luz)),str(Temperatura))
+             pid_a = subprocess.Popen(["python","/home/pi/Proyecto/Automatizacion.py",str(calc_luz(Luz)),str(Temperatura)])
              lcd_string(">Modo Auto: on ",LCD_LINE_2)
           else:
              client_socket.send(Comando)

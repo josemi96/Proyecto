@@ -16,19 +16,19 @@ def get_temp_sens():
         return float(temperature)
 
 #Lectura Luminosidad
-pin_to_circuit = 7
+pin_light = 7
 def rc_time (pin_to_circuit):
     count = 0
     #Output on the pin for
-    GPIO.setup(pin_to_circuit, GPIO.OUT)
-    GPIO.output(pin_to_circuit, GPIO.LOW)
+    GPIO.setup(pin_light, GPIO.OUT)
+    GPIO.output(pin_light, GPIO.LOW)
     time.sleep(0.1)
     #Change the pin back to input
-    GPIO.setup(pin_to_circuit, GPIO.IN)
+    GPIO.setup(pin_light, GPIO.IN)
     #Count until the pin goes high
-    while (GPIO.input(pin_to_circuit) == GPIO.LOW):
+    while (GPIO.input(pin_light) == GPIO.LOW):
         count += 1
-    return count/500
+    return count
 
 #Configuracion de los reles: 
 R1=16
@@ -47,11 +47,11 @@ try:
     temperatura_sel= float (sys.argv[2])
     # Main loop
     while True:
-        time.sleep(30)
-        measure = rc_time(pin_to_circuit)
-        print "Temperatura: ",measure
+        time.sleep(5)
+        measure = rc_time(pin_light)
+        print "Luminosidad: ",measure
         temp = get_temp_sens()
-        print "Luminosidad: ",temp
+        print "Temperatura: ",temp
         if (temp>temperatura_sel) :
              GPIO.output(R1,True)
              if Estado1 == False:

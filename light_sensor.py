@@ -24,7 +24,7 @@ def rc_time (pin_to_circuit):
     while (GPIO.input(pin_to_circuit) == GPIO.LOW):
         count += 1
 
-    return count/750
+    return count
 
 #Catch when script is interrupted, cleanup correctly
 try:
@@ -32,10 +32,7 @@ try:
     while True:
         measure = rc_time(pin_to_circuit)
         print measure
-        if measure < 2000:
-             GPIO.output(12,False)
-        else:
-             GPIO.output(12,True)
+        
 except KeyboardInterrupt:
     pass
 finally:
