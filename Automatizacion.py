@@ -45,19 +45,23 @@ try:
     temperatura_sel= float (sys.argv[2])
     # Main loop
     while True:
-        time.sleep(1)
+        time.sleep(5)
         measure = rc_time(pin_to_circuit)
-        #print measure
+        print measure
         temp = get_temp_sens()
-        #print temp
+        print temp
         if (temp>temperatura_sel) :
              GPIO.output(R1,True)
+             print "Temperatura maxima superada, activando R1."
         else:
              GPIO.output(R1,False)
+             print "Temperatura descendiendo, desactivando R1."
         if (measure>luz_sel) :
              GPIO.output(R2,True)
+             print "Nivel de luz minimo alcanzado, activando R2."
         else:
              GPIO.output(R2,False)
+             print "Nivel de luz aumentando, desactivando R2."
 except KeyboardInterrupt:
     pass
 finally:

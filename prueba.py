@@ -7,7 +7,7 @@
 #Declaracion de librerias:
 import time
 import shlex, subprocess
-import sys
+import RPi.GPIO as GPIO
 import smbus
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
@@ -103,11 +103,11 @@ try:
     lcd_string(">TEMP=",LCD_LINE_1)
     lcd_string(">LUZ=",LCD_LINE_2)
     while(1):
-      sleep(5)
+      time.sleep(5)
       print "Realizando lectura de luminosidad.."
-      measure = rc_time(pin_light)
+      measure =str( rc_time(pin_light))
       print "Realizando lectura de temperatura.."
-      temp = get_temp_sens()
+      temp = str(get_temp_sens())
       lcd_string(">TEMP="+temp,LCD_LINE_1)
       lcd_string(">LUZ="+measure,LCD_LINE_2)
 
