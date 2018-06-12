@@ -1,5 +1,8 @@
-#Programacion
+#-----------------------------------------------
+#-- Jose Miguel Hidalgo Rondon -----------------
+#-----------------------------------------------
 
+#Programacion
 import sys
 import RPi.GPIO as GPIO
 import time
@@ -28,7 +31,7 @@ try:
         time.sleep(5)
         if((Hora1==time.strftime("%H"))&(Minuto1==time.strftime("%M"))):
             GPIO.output(R1,Modo1)
-        if((Hora1==time.strftime("%H"))&(Minuto1==time.strftime("%M"))):
+        if((Hora2==time.strftime("%H"))&(Minuto2==time.strftime("%M"))):
             GPIO.output(R2,Modo2)
 
 except KeyboardInterrupt:
