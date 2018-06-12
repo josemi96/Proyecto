@@ -104,11 +104,6 @@ def rc_time (pin_light):
         count += 1
     return count
 
-#Funcion calculo de luz
-def calc_luz(porctlumin):
-    lumin= ((porctlumin/100)*(L2-L1))+L1
-    return lumin
-
 #Configuracion del modo Programado:
 Config_CP = False
 pid_p=0
@@ -217,7 +212,7 @@ try:
         if(Comando=="Comando_AA"):
           if(Config_CA):
              print "Activando Modo Automatico"
-             pid_a = subprocess.Popen(["python","/home/pi/Proyecto/Automatizacion.py",str(calc_luz(Luz)),str(Temperatura)])
+             pid_a = subprocess.Popen(["python","/home/pi/Proyecto/Automatizacion.py",str(Luz),str(Temperatura)])
              lcd_string(">Modo Auto: on ",LCD_LINE_2)
           else:
              client_socket.send(Comando)

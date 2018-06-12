@@ -28,7 +28,7 @@ def rc_time (pin_to_circuit):
     #Count until the pin goes high
     while (GPIO.input(pin_to_circuit) == GPIO.LOW):
         count += 1
-    return count/500
+    return count
 
 #Configuracion de los reles
 #Configuracion de los reles: 
