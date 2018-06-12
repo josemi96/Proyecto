@@ -106,7 +106,7 @@ def rc_time (pin_light):
 
 #Funcion calculo de luz
 def calc_luz(porctlumin):
-    lumin= ((porctlumin/100)*(L1-L2))+L2
+    lumin= ((porctlumin/100)*(L2-L1))+L1
     return lumin
 
 #Configuracion del modo Programado:
